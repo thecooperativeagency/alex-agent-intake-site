@@ -1,9 +1,5 @@
 const form = document.getElementById('intakeForm');
-const output = document.getElementById('output');
-const copyBtn = document.getElementById('copyBtn');
-const downloadBtn = document.getElementById('downloadBtn');
 const submitBtn = document.getElementById('submitBtn');
-const outputCard = document.getElementById('outputCard');
 const submitStatus = document.getElementById('submitStatus');
 const submitEndpoint = window.ALEX_AGENT_CONFIG?.submitEndpoint || '';
 
@@ -49,47 +45,8 @@ function setSubmitting(isSubmitting) {
   submitBtn.textContent = isSubmitting ? 'Submitting…' : 'Submit answers';
 }
 
-function refreshOutput(markReady = true) {
-  output.textContent = buildSummary();
-  if (markReady) {
-    outputCard.classList.remove('hidden-output');
-    submitBtn.classList.remove('hidden-action');
-    copyBtn.classList.remove('hidden-action');
-    downloadBtn.classList.remove('hidden-action');
-  }
-}
-
-form.addEventListener('submit', (event) => {
+form.addEventListener('submit', async (event) => {
   event.preventDefault();
-  refreshOutput(true);
-  setSubmitStatus(submitEndpoint ? 'If everything looks right, click Submit answers.' : 'Submission endpoint is not connected yet.', submitEndpoint ? '' : 'error');
-});
-
-copyBtn.addEventListener('click', async () => {
-  refreshOutput(true);
-  try {
-    await navigator.clipboard.writeText(output.textContent);
-    copyBtn.textContent = 'Copied';
-    setTimeout(() => (copyBtn.textContent = 'Copy answers'), 1400);
-  } catch (err) {
-    copyBtn.textContent = 'Copy failed';
-    setTimeout(() => (copyBtn.textContent = 'Copy answers'), 1800);
-  }
-});
-
-downloadBtn.addEventListener('click', () => {
-  refreshOutput(true);
-  const blob = new Blob([output.textContent], { type: 'text/plain;charset=utf-8' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = 'alex-agent-intake.txt';
-  a.click();
-  URL.revokeObjectURL(url);
-});
-
-submitBtn.addEventListener('click', async () => {
-  refreshOutput(true);
 
   if (!submitEndpoint) {
     setSubmitStatus('Submission endpoint is not connected yet.', 'error');
@@ -102,7 +59,7 @@ submitBtn.addEventListener('click', async () => {
   try {
     const payload = {
       ...getValues(),
-      summary: output.textContent,
+      summary: buildSummary(),
       sourceUrl: window.location.href,
     };
 
@@ -120,7 +77,7 @@ submitBtn.addEventListener('click', async () => {
     }
 
     setSubmitStatus('Thanks — your answers were sent successfully.', 'success');
-    submitBtn.textContent = 'Sent';
+    submitBtn.textContent = 'Submitted';
     submitBtn.disabled = true;
   } catch (error) {
     setSubmitStatus(`Sorry — there was a problem sending this form. ${error.message}`, 'error');

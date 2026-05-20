@@ -12,17 +12,14 @@ function getValues() {
   const businessOther = document.getElementById('businessOther').value.trim();
   if (businessOther) businesses.push(`Other: ${businessOther}`);
 
-  const channel = document.querySelector('input[name="channel"]:checked')?.value || '';
-
   return {
     agentName: document.getElementById('agentName').value.trim(),
     businesses,
+    mainHelp: document.getElementById('mainHelp').value.trim(),
     tools: document.getElementById('tools').value.trim(),
     googleAccount: document.getElementById('googleAccount').value.trim(),
-    budget: document.getElementById('budget').value,
-    channel,
     approval: document.getElementById('approval').value.trim(),
-    critical: document.getElementById('critical').value.trim(),
+    budget: document.getElementById('budget').value,
   };
 }
 
@@ -32,13 +29,12 @@ function buildSummary() {
     'Alex Agent — Initial Setup Submission',
     '',
     `1. Agent name: ${data.agentName || '[not provided]'}`,
-    `2. Business focus: ${data.businesses.length ? data.businesses.join(', ') : '[not provided]'}`,
-    `3. Tools/accounts: ${data.tools || '[not provided]'}`,
-    `4. Google account: ${data.googleAccount || '[not provided]'}`,
-    `5. Monthly budget: ${data.budget || '[not provided]'}`,
-    `6. Main channel: ${data.channel || '[not provided]'}`,
-    `7. Never without approval: ${data.approval || '[not provided]'}`,
-    `8. Launch-critical notes: ${data.critical || '[not provided]'}`,
+    `2. Business scope: ${data.businesses.length ? data.businesses.join(', ') : '[not provided]'}`,
+    `3. Main help wanted: ${data.mainHelp || '[not provided]'}`,
+    `4. Starting tools/accounts: ${data.tools || '[not provided]'}`,
+    `5. Primary Google/work account: ${data.googleAccount || '[not provided]'}`,
+    `6. Never without approval: ${data.approval || '[not provided]'}`,
+    `7. Monthly budget: ${data.budget || '[not provided]'}`,
   ].join('\n');
 }
 

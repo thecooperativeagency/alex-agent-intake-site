@@ -21,17 +21,19 @@
           <span>A lightweight setup form.</span>
           <strong>What this is not:</strong>
           <span>A full business deep dive.</span>
+          <strong>Default launch channel:</strong>
+          <span>We’ll usually start in Telegram unless we decide otherwise together.</span>
         </div>
       </section>
 
       <form id="intakeForm" class="card form-card">
         <div class="field-group">
-          <label for="agentName">1. What do you want to name your agent?</label>
+          <label for="agentName">1. What do you want to name the agent?</label>
           <input id="agentName" name="agentName" type="text" placeholder="Example: Scout, Atlas, Alex Assistant" />
         </div>
 
         <fieldset class="field-group">
-          <legend>2. Which business or businesses should it help with first?</legend>
+          <legend>2. What business or businesses should it help with?</legend>
           <div class="checkbox-grid">
             <label><input type="checkbox" name="business" value="RV rental" /> RV rental</label>
             <label><input type="checkbox" name="business" value="Home inspection" /> Home inspection</label>
@@ -41,45 +43,35 @@
         </fieldset>
 
         <div class="field-group">
-          <label for="tools">3. What tools or accounts do you think it should connect to?</label>
+          <label for="mainHelp">3. What is the main kind of help you want from it?</label>
+          <textarea id="mainHelp" name="mainHelp" rows="3" placeholder="Examples: handling inquiries, drafting emails, organizing leads, answering repeat questions, preparing follow-ups"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label for="tools">4. Which tools or accounts should it use at the start?</label>
           <textarea id="tools" name="tools" rows="3" placeholder="Examples: Gmail, Google Calendar, Drive, website, CRM, text, email"></textarea>
         </div>
 
-        <div class="field-group two-col">
-          <div>
-            <label for="googleAccount">4. What Google account email should we plan around?</label>
-            <input id="googleAccount" name="googleAccount" type="email" placeholder="name@gmail.com" />
-          </div>
-          <div>
-            <label for="budget">5. What monthly budget feels reasonable?</label>
-            <select id="budget" name="budget">
-              <option value="">Select a range</option>
-              <option>Under $50 / month</option>
-              <option>$50–$150 / month</option>
-              <option>$150–$300 / month</option>
-              <option>$300+ / month</option>
-              <option>Not sure yet</option>
-            </select>
-          </div>
+        <div class="field-group">
+          <label for="googleAccount">5. What primary Google or work account should we build around?</label>
+          <input id="googleAccount" name="googleAccount" type="email" placeholder="name@gmail.com" />
         </div>
 
         <div class="field-group">
-          <label>6. To start, we recommend using Telegram. Does that work for you?</label>
-          <div class="checkbox-grid radio-grid">
-            <label><input type="radio" name="channel" value="Telegram works for me" checked /> Telegram works for me</label>
-            <label><input type="radio" name="channel" value="I want to discuss another option" /> I want to discuss another option</label>
-          </div>
-          <p class="microcopy">We’re starting with a simple setup so everything works reliably.</p>
-        </div>
-
-        <div class="field-group">
-          <label for="approval">7. What should it never do without your approval?</label>
+          <label for="approval">6. What should it never do without your approval?</label>
           <textarea id="approval" name="approval" rows="3" placeholder="Examples: send emails, contact clients, submit reports, change calendar events"></textarea>
         </div>
 
         <div class="field-group">
-          <label for="critical">8. Anything important we should know before we get started?</label>
-          <textarea id="critical" name="critical" rows="4" placeholder="Any launch-critical constraints, preferences, or concerns"></textarea>
+          <label for="budget">7. What monthly budget should we stay inside?</label>
+          <select id="budget" name="budget">
+            <option value="">Select a range</option>
+            <option>Under $50 / month</option>
+            <option>$50–$150 / month</option>
+            <option>$150–$300 / month</option>
+            <option>$300+ / month</option>
+            <option>Not sure yet</option>
+          </select>
         </div>
 
         <div class="actions">
@@ -99,11 +91,11 @@
           </div>
         </div>
         <pre id="output">Your answers will appear here after you click Review answers.</pre>
-        <p class="helper">If everything looks right, send this back to Lance.</p>
+        <p class="helper">If everything looks right, send it through.</p>
       </section>
     </main>
 
-    <script src="config.js?v=20260520b"></script>
-    <script src="app.js?v=20260520b"></script>
+    <script src="config.js?v=20260520c"></script>
+    <script src="app.js?v=20260520c"></script>
   </body>
 </html>

@@ -5,8 +5,14 @@ const PORT = Number(process.env.PORT || 8787);
 const API_BASE = process.env.AGENTMAIL_API_BASE || 'https://api.agentmail.to/v0';
 const API_KEY = process.env.AGENTMAIL_API_KEY || '';
 const TARGET_INBOX_EMAIL = process.env.AGENTMAIL_TARGET_INBOX_EMAIL || 'archicoop@agentmail.to';
+const SENDER_USERNAME = process.env.AGENTMAIL_SENDER_USERNAME || 'alex-intake-form';
+const SENDER_DOMAIN = process.env.AGENTMAIL_SENDER_DOMAIN || 'agentmail.to';
+const SENDER_CLIENT_ID = process.env.AGENTMAIL_SENDER_CLIENT_ID || 'alex-agent-intake-form-sender-v1';
+const SENDER_DISPLAY_NAME = process.env.AGENTMAIL_SENDER_DISPLAY_NAME || 'Alex Intake Form';
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || '*';
 const DRY_RUN = process.env.AGENTMAIL_DRY_RUN === '1';
+
+const SENDER_INBOX_EMAIL = `${SENDER_USERNAME}@${SENDER_DOMAIN}`;
 
 function json(response, statusCode, payload) {
   response.writeHead(statusCode, {
@@ -26,6 +32,7 @@ function getSubmission(body) {
   return {
     agentName: normalizeText(body.agentName),
     businesses: Array.isArray(body.businesses) ? body.businesses.map(normalizeText).filter(Boolean) : [],
+    mainHelp: normalizeText(body.mainHelp),
     tools: normalizeText(body.tools),
     googleAccount: normalizeText(body.googleAccount),
     budget: normalizeText(body.budget),
@@ -43,14 +50,49 @@ function buildSummary(data) {
     'Alex Agent — Initial Setup Submission',
     '',
     `1. Agent name: ${data.agentName || '[not provided]'}`,
-    `2. Business focus: ${data.businesses.length ? data.businesses.join(', ') : '[not provided]'}`,
-    `3. Tools/accounts: ${data.tools || '[not provided]'}`,
-    `4. Google account: ${data.googleAccount || '[not provided]'}`,
-    `5. Monthly budget: ${data.budget || '[not provided]'}`,
-    `6. Main channel: ${data.channel || '[not provided]'}`,
-    `7. Never without approval: ${data.approval || '[not provided]'}`,
-    `8. Launch-critical notes: ${data.critical || '[not provided]'}`,
+    `2. Business scope: ${data.businesses.length ? data.businesses.join(', ') : '[not provided]'}`,
+    `3. Main help wanted: ${data.mainHelp || '[not provided]'}`,
+    `4. Starting tools/accounts: ${data.tools || '[not provided]'}`,
+    `5. Primary Google/work account: ${data.googleAccount || '[not provided]'}`,
+    `6. Never without approval: ${data.approval || '[not provided]'}`,
+    `7. Monthly budget: ${data.budget || '[not provided]'}`,
   ].join('\n');
+}
+
+function escapeHtml(value) {
+  return String(value || '')
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function buildHtml(data, submittedAt) {
+  const items = [
+    ['Agent name', data.agentName || '[not provided]'],
+    ['Business scope', data.businesses.length ? data.businesses.join(', ') : '[not provided]'],
+    ['Main help wanted', data.mainHelp || '[not provided]'],
+    ['Starting tools/accounts', data.tools || '[not provided]'],
+    ['Primary Google/work account', data.googleAccount || '[not provided]'],
+    ['Never without approval', data.approval || '[not provided]'],
+    ['Monthly budget', data.budget || '[not provided]'],
+    ['Submitted at', submittedAt],
+    ['Source URL', data.sourceUrl || '[not provided]'],
+  ];
+
+  return `<!doctype html>
+<html>
+  <body style="font-family: Arial, sans-serif; line-height: 1.5; color: #111;">
+    <h2>Alex Agent — Initial Setup Submission</h2>
+    <p>A new onboarding form submission was received.</p>
+    <ul>
+      ${items
+        .map(([label, value]) => `<li><strong>${escapeHtml(label)}:</strong> ${escapeHtml(value)}</li>`)
+        .join('')}
+    </ul>
+  </body>
+</html>`;
 }
 
 async function readJson(request) {
@@ -93,22 +135,65 @@ async function findInboxByEmail(email) {
   return inboxes.find((inbox) => inbox.email?.toLowerCase() === email.toLowerCase()) || null;
 }
 
-async function sendSubmissionToAgentMail(data) {
-  if (DRY_RUN) {
-    const summary = buildSummary(data);
-    const subject = `Alex intake draft: ${data.agentName || 'new submission'}`;
-    const text = [
-      summary,
-      '',
-      `Submitted at: ${new Date().toISOString()}`,
-      `Source URL: ${data.sourceUrl || '[not provided]'}`,
-    ].join('\n');
+async function createInbox({ username, domain, display_name, client_id }) {
+  return agentmail('/inboxes', {
+    method: 'POST',
+    body: JSON.stringify({ username, domain, display_name, client_id }),
+  });
+}
 
+async function getOrCreateSenderInbox() {
+  const existingInbox = await findInboxByEmail(SENDER_INBOX_EMAIL);
+  if (existingInbox) return existingInbox;
+
+  return createInbox({
+    username: SENDER_USERNAME,
+    domain: SENDER_DOMAIN,
+    display_name: SENDER_DISPLAY_NAME,
+    client_id: SENDER_CLIENT_ID,
+  });
+}
+
+async function resolveSenderInbox(targetInbox) {
+  try {
+    return await getOrCreateSenderInbox();
+  } catch (error) {
+    if (error?.status === 403) {
+      return targetInbox;
+    }
+    throw error;
+  }
+}
+
+async function sendMessageFromInbox(inboxId, payload) {
+  return agentmail(`/inboxes/${inboxId}/messages/send`, {
+    method: 'POST',
+    body: JSON.stringify(payload),
+  });
+}
+
+async function sendSubmissionToAgentMail(data) {
+  const submittedAt = new Date().toISOString();
+  const summary = buildSummary(data);
+  const subject = `Alex intake submission: ${data.agentName || 'new submission'}`;
+  const text = [
+    summary,
+    '',
+    `Submitted at: ${submittedAt}`,
+    `Source URL: ${data.sourceUrl || '[not provided]'}`,
+  ].join('\n');
+  const html = buildHtml(data, submittedAt);
+
+  if (DRY_RUN) {
     return {
       dryRun: true,
       targetInbox: {
         email: TARGET_INBOX_EMAIL,
         inbox_id: 'dry-run-target',
+      },
+      senderInbox: {
+        email: SENDER_INBOX_EMAIL,
+        inbox_id: 'dry-run-sender',
       },
       subject,
       preview: text,
@@ -122,27 +207,20 @@ async function sendSubmissionToAgentMail(data) {
     throw error;
   }
 
-  const summary = buildSummary(data);
-  const subject = `Alex intake draft: ${data.agentName || 'new submission'}`;
-  const text = [
-    summary,
-    '',
-    `Submitted at: ${new Date().toISOString()}`,
-    `Source URL: ${data.sourceUrl || '[not provided]'}`,
-  ].join('\n');
-
-  const draft = await agentmail(`/inboxes/${targetInbox.inbox_id}/drafts`, {
-    method: 'POST',
-    body: JSON.stringify({
-      subject,
-      text,
-    }),
+  const senderInbox = await resolveSenderInbox(targetInbox);
+  const message = await sendMessageFromInbox(senderInbox.inbox_id, {
+    to: [targetInbox.email],
+    subject,
+    text,
+    html,
+    labels: ['alex-intake-submission'],
   });
 
   return {
     dryRun: false,
     targetInbox,
-    draft,
+    senderInbox,
+    message,
   };
 }
 
@@ -164,6 +242,7 @@ const server = http.createServer(async (request, response) => {
       ok: true,
       dryRun: DRY_RUN,
       targetInboxEmail: TARGET_INBOX_EMAIL,
+      senderInboxEmail: SENDER_INBOX_EMAIL,
     });
     return;
   }
@@ -183,7 +262,9 @@ const server = http.createServer(async (request, response) => {
         ok: true,
         dryRun: result.dryRun,
         targetInbox: result.targetInbox.email,
-        draftId: result.draft?.draft_id || null,
+        senderInbox: result.senderInbox?.email || null,
+        messageId: result.message?.message_id || null,
+        threadId: result.message?.thread_id || null,
       });
     } catch (error) {
       json(response, error.status || 500, {

@@ -28,7 +28,7 @@ This repo now has two parts:
 5. The backend uses AgentMail to:
    - find the target inbox `archicoop@agentmail.to`
    - find or create a sender inbox (`alex-intake-form@agentmail.to` by default)
-   - send the submission as an email into the target inbox
+   - send the submission as a real email message into the target inbox
 
 That gives you a normal email thread inside AgentMail that Archi can access.
 
@@ -40,7 +40,9 @@ That gives you a normal email thread inside AgentMail that Archi can access.
 Optional:
 - `PORT` — defaults to `8787`
 - `AGENTMAIL_SENDER_USERNAME` — defaults to `alex-intake-form`
+- `AGENTMAIL_SENDER_DOMAIN` — defaults to `agentmail.to`
 - `AGENTMAIL_SENDER_CLIENT_ID` — defaults to `alex-agent-intake-form-sender-v1`
+- `AGENTMAIL_SENDER_DISPLAY_NAME` — defaults to `Alex Intake Form`
 - `AGENTMAIL_API_BASE` — defaults to `https://api.agentmail.to/v0`
 - `AGENTMAIL_DRY_RUN=1` — local test mode, no real AgentMail call
 
@@ -60,12 +62,11 @@ curl -X POST http://localhost:8787/submit \
   -d '{
     "agentName": "Scout",
     "businesses": ["Home inspection"],
+    "mainHelp": "Draft replies and organize inbound requests",
     "tools": "Gmail, Calendar",
     "googleAccount": "alex@example.com",
-    "budget": "$50-$150 / month",
-    "channel": "Telegram works for me",
     "approval": "Never email clients without approval.",
-    "critical": "Keep launch conservative.",
+    "budget": "$50-$150 / month",
     "summary": "test",
     "sourceUrl": "http://localhost/test"
   }'

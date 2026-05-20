@@ -5,8 +5,6 @@ const PORT = Number(process.env.PORT || 8787);
 const API_BASE = process.env.AGENTMAIL_API_BASE || 'https://api.agentmail.to/v0';
 const API_KEY = process.env.AGENTMAIL_API_KEY || '';
 const TARGET_INBOX_EMAIL = process.env.AGENTMAIL_TARGET_INBOX_EMAIL || 'archicoop@agentmail.to';
-const SENDER_USERNAME = process.env.AGENTMAIL_SENDER_USERNAME || 'alex-intake-form';
-const SENDER_CLIENT_ID = process.env.AGENTMAIL_SENDER_CLIENT_ID || 'alex-agent-intake-form-sender-v1';
 const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || '*';
 const DRY_RUN = process.env.AGENTMAIL_DRY_RUN === '1';
 
@@ -95,24 +93,10 @@ async function findInboxByEmail(email) {
   return inboxes.find((inbox) => inbox.email?.toLowerCase() === email.toLowerCase()) || null;
 }
 
-async function getOrCreateSenderInbox() {
-  const existing = await findInboxByEmail(`${SENDER_USERNAME}@agentmail.to`);
-  if (existing) return existing;
-
-  return agentmail('/inboxes', {
-    method: 'POST',
-    body: JSON.stringify({
-      username: SENDER_USERNAME,
-      client_id: SENDER_CLIENT_ID,
-      display_name: 'Alex Intake Form',
-    }),
-  });
-}
-
 async function sendSubmissionToAgentMail(data) {
   if (DRY_RUN) {
     const summary = buildSummary(data);
-    const subject = `Alex intake: ${data.agentName || 'new submission'}`;
+    const subject = `Alex intake draft: ${data.agentName || 'new submission'}`;
     const text = [
       summary,
       '',
@@ -122,10 +106,6 @@ async function sendSubmissionToAgentMail(data) {
 
     return {
       dryRun: true,
-      senderInbox: {
-        email: `${SENDER_USERNAME}@agentmail.to`,
-        inbox_id: 'dry-run-sender',
-      },
       targetInbox: {
         email: TARGET_INBOX_EMAIL,
         inbox_id: 'dry-run-target',
@@ -142,9 +122,8 @@ async function sendSubmissionToAgentMail(data) {
     throw error;
   }
 
-  const senderInbox = await getOrCreateSenderInbox();
   const summary = buildSummary(data);
-  const subject = `Alex intake: ${data.agentName || 'new submission'}`;
+  const subject = `Alex intake draft: ${data.agentName || 'new submission'}`;
   const text = [
     summary,
     '',
@@ -152,10 +131,9 @@ async function sendSubmissionToAgentMail(data) {
     `Source URL: ${data.sourceUrl || '[not provided]'}`,
   ].join('\n');
 
-  const sent = await agentmail(`/inboxes/${senderInbox.inbox_id}/messages/send`, {
+  const draft = await agentmail(`/inboxes/${targetInbox.inbox_id}/drafts`, {
     method: 'POST',
     body: JSON.stringify({
-      to: [targetInbox.email],
       subject,
       text,
     }),
@@ -163,9 +141,8 @@ async function sendSubmissionToAgentMail(data) {
 
   return {
     dryRun: false,
-    senderInbox,
     targetInbox,
-    sent,
+    draft,
   };
 }
 
@@ -206,9 +183,7 @@ const server = http.createServer(async (request, response) => {
         ok: true,
         dryRun: result.dryRun,
         targetInbox: result.targetInbox.email,
-        senderInbox: result.senderInbox.email,
-        messageId: result.sent?.message_id || null,
-        threadId: result.sent?.thread_id || null,
+        draftId: result.draft?.draft_id || null,
       });
     } catch (error) {
       json(response, error.status || 500, {

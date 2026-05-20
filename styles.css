@@ -151,6 +151,19 @@ button.secondary {
 .hidden-action {
   display: none;
 }
+
+.submit-status {
+  min-height: 1.4rem;
+  margin-top: 0.35rem;
+}
+
+.submit-status.error {
+  color: #ffb4b4;
+}
+
+.submit-status.success {
+  color: #b7f7cb;
+}
 .output-header {
   display: flex;
   justify-content: space-between;

@@ -84,9 +84,11 @@
 
         <div class="actions">
           <button type="submit" class="primary">Review answers</button>
+          <button type="button" id="submitBtn" class="primary hidden-action">Submit answers</button>
           <button type="button" id="copyBtn" class="secondary hidden-action">Copy answers</button>
           <button type="button" id="downloadBtn" class="secondary hidden-action">Download answers</button>
         </div>
+        <p id="submitStatus" class="helper submit-status" aria-live="polite"></p>
       </form>
 
       <section id="outputCard" class="card output-card hidden-output" aria-live="polite">
@@ -101,6 +103,7 @@
       </section>
     </main>
 
+    <script src="config.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

@@ -1,0 +1,8 @@
+{
+  "name": "alex-agent-intake-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node api/server.mjs"
+  }
+}

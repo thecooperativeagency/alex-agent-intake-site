@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Alex Agent — Initial Setup</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="card hero">
+        <div>
+          <p class="eyebrow">Initial setup</p>
+          <h1>Alex Agent — Quick Setup</h1>
+          <p class="lede">
+            This is just the first pass. We only need the basics required to get version 1 of your agent alive.
+            Short answers are perfect.
+          </p>
+        </div>
+        <div class="hero-note">
+          <strong>What this is:</strong>
+          <span>A lightweight setup form.</span>
+          <strong>What this is not:</strong>
+          <span>A full business deep dive.</span>
+        </div>
+      </section>
+
+      <form id="intakeForm" class="card form-card">
+        <div class="field-group">
+          <label for="agentName">1. What do you want to name your agent?</label>
+          <input id="agentName" name="agentName" type="text" placeholder="Example: Scout, Atlas, Alex Assistant" />
+        </div>
+
+        <fieldset class="field-group">
+          <legend>2. Which business or businesses should it help with first?</legend>
+          <div class="checkbox-grid">
+            <label><input type="checkbox" name="business" value="RV rental" /> RV rental</label>
+            <label><input type="checkbox" name="business" value="Home inspection" /> Home inspection</label>
+            <label><input type="checkbox" name="business" value="On-set sound work" /> On-set sound work</label>
+          </div>
+          <input id="businessOther" name="businessOther" type="text" placeholder="Other / notes" />
+        </fieldset>
+
+        <div class="field-group">
+          <label for="tools">3. What tools or accounts do you think it should connect to?</label>
+          <textarea id="tools" name="tools" rows="3" placeholder="Examples: Gmail, Google Calendar, Drive, website, CRM, text, email"></textarea>
+        </div>
+
+        <div class="field-group two-col">
+          <div>
+            <label for="googleAccount">4. What Google account email should we plan around?</label>
+            <input id="googleAccount" name="googleAccount" type="email" placeholder="name@gmail.com" />
+          </div>
+          <div>
+            <label for="budget">5. What monthly budget feels reasonable?</label>
+            <select id="budget" name="budget">
+              <option value="">Select a range</option>
+              <option>Under $50 / month</option>
+              <option>$50–$150 / month</option>
+              <option>$150–$300 / month</option>
+              <option>$300+ / month</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-group two-col">
+          <div>
+            <label for="channel">6. Where do you want to use it most often?</label>
+            <select id="channel" name="channel">
+              <option value="">Select one</option>
+              <option>Text / SMS</option>
+              <option>Email</option>
+              <option>Slack</option>
+              <option>Web portal</option>
+              <option>Telegram</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div>
+            <label for="channelOther">If other, where?</label>
+            <input id="channelOther" name="channelOther" type="text" placeholder="Optional" />
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="approval">7. What should it never do without your approval?</label>
+          <textarea id="approval" name="approval" rows="3" placeholder="Examples: send emails, contact clients, submit reports, change calendar events"></textarea>
+        </div>
+
+        <div class="field-group">
+          <label for="critical">8. Anything critical we should know before version 1 goes live?</label>
+          <textarea id="critical" name="critical" rows="4" placeholder="Any launch-critical constraints, preferences, or concerns"></textarea>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="primary">Submit</button>
+          <button type="button" id="copyBtn" class="secondary">Copy summary</button>
+          <button type="button" id="downloadBtn" class="secondary">Download .txt</button>
+        </div>
+      </form>
+
+      <section class="card output-card">
+        <div class="output-header">
+          <div>
+            <p class="eyebrow">Submission preview</p>
+            <h2>What gets sent back</h2>
+          </div>
+          <span id="statusPill" class="status-pill">Waiting for input</span>
+        </div>
+        <pre id="output">Fill out the form above and click Submit.</pre>
+        <p class="helper">
+          This version is built as a static site for easy GitHub Pages hosting. The submit button generates a clean summary that can be copied or downloaded.
+        </p>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -2,16 +2,14 @@ const form = document.getElementById('intakeForm');
 const output = document.getElementById('output');
 const copyBtn = document.getElementById('copyBtn');
 const downloadBtn = document.getElementById('downloadBtn');
-const statusPill = document.getElementById('statusPill');
+const outputCard = document.getElementById('outputCard');
 
 function getValues() {
   const businesses = Array.from(document.querySelectorAll('input[name="business"]:checked')).map((el) => el.value);
   const businessOther = document.getElementById('businessOther').value.trim();
   if (businessOther) businesses.push(`Other: ${businessOther}`);
 
-  const channel = document.getElementById('channel').value;
-  const channelOther = document.getElementById('channelOther').value.trim();
-  const channelValue = channel === 'Other' && channelOther ? `${channel} — ${channelOther}` : channel || channelOther;
+  const channel = document.querySelector('input[name="channel"]:checked')?.value || '';
 
   return {
     agentName: document.getElementById('agentName').value.trim(),
@@ -19,7 +17,7 @@ function getValues() {
     tools: document.getElementById('tools').value.trim(),
     googleAccount: document.getElementById('googleAccount').value.trim(),
     budget: document.getElementById('budget').value,
-    channel: channelValue,
+    channel,
     approval: document.getElementById('approval').value.trim(),
     critical: document.getElementById('critical').value.trim(),
   };
@@ -44,8 +42,9 @@ function buildSummary() {
 function refreshOutput(markReady = true) {
   output.textContent = buildSummary();
   if (markReady) {
-    statusPill.textContent = 'Ready to copy';
-    statusPill.classList.add('ready');
+    outputCard.classList.remove('hidden-output');
+    copyBtn.classList.remove('hidden-action');
+    downloadBtn.classList.remove('hidden-action');
   }
 }
 

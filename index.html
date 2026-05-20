@@ -13,8 +13,7 @@
           <p class="eyebrow">Initial setup</p>
           <h1>Alex Agent — Quick Setup</h1>
           <p class="lede">
-            This is just the first pass. We only need the basics required to get version 1 of your agent alive.
-            Short answers are perfect.
+            We only need a few basics to get started. Short answers are perfect.
           </p>
         </div>
         <div class="hero-note">
@@ -64,23 +63,13 @@
           </div>
         </div>
 
-        <div class="field-group two-col">
-          <div>
-            <label for="channel">6. Where do you want to use it most often?</label>
-            <select id="channel" name="channel">
-              <option value="">Select one</option>
-              <option>Text / SMS</option>
-              <option>Email</option>
-              <option>Slack</option>
-              <option>Web portal</option>
-              <option>Telegram</option>
-              <option>Other</option>
-            </select>
+        <div class="field-group">
+          <label>6. To start, we recommend using Telegram. Does that work for you?</label>
+          <div class="checkbox-grid radio-grid">
+            <label><input type="radio" name="channel" value="Telegram works for me" checked /> Telegram works for me</label>
+            <label><input type="radio" name="channel" value="I want to discuss another option" /> I want to discuss another option</label>
           </div>
-          <div>
-            <label for="channelOther">If other, where?</label>
-            <input id="channelOther" name="channelOther" type="text" placeholder="Optional" />
-          </div>
+          <p class="microcopy">We’re starting with a simple setup so everything works reliably.</p>
         </div>
 
         <div class="field-group">
@@ -89,29 +78,26 @@
         </div>
 
         <div class="field-group">
-          <label for="critical">8. Anything critical we should know before version 1 goes live?</label>
+          <label for="critical">8. Anything important we should know before we get started?</label>
           <textarea id="critical" name="critical" rows="4" placeholder="Any launch-critical constraints, preferences, or concerns"></textarea>
         </div>
 
         <div class="actions">
-          <button type="submit" class="primary">Submit</button>
-          <button type="button" id="copyBtn" class="secondary">Copy summary</button>
-          <button type="button" id="downloadBtn" class="secondary">Download .txt</button>
+          <button type="submit" class="primary">Review answers</button>
+          <button type="button" id="copyBtn" class="secondary hidden-action">Copy answers</button>
+          <button type="button" id="downloadBtn" class="secondary hidden-action">Download answers</button>
         </div>
       </form>
 
-      <section class="card output-card">
+      <section id="outputCard" class="card output-card hidden-output" aria-live="polite">
         <div class="output-header">
           <div>
-            <p class="eyebrow">Submission preview</p>
-            <h2>What gets sent back</h2>
+            <p class="eyebrow">Review</p>
+            <h2>Your answers</h2>
           </div>
-          <span id="statusPill" class="status-pill">Waiting for input</span>
         </div>
-        <pre id="output">Fill out the form above and click Submit.</pre>
-        <p class="helper">
-          This version is built as a static site for easy GitHub Pages hosting. The submit button generates a clean summary that can be copied or downloaded.
-        </p>
+        <pre id="output">Your answers will appear here after you click Review answers.</pre>
+        <p class="helper">If everything looks right, send this back to Lance.</p>
       </section>
     </main>
 

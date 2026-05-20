@@ -52,7 +52,7 @@ h1, h2 {
 }
 h1 { font-size: clamp(2rem, 5vw, 3.2rem); }
 h2 { font-size: 1.4rem; }
-.lede, .helper {
+.lede, .helper, .microcopy {
   color: var(--muted);
   line-height: 1.6;
 }
@@ -107,6 +107,9 @@ input::placeholder, textarea::placeholder {
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 10px;
 }
+.radio-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
 .checkbox-grid label {
   display: flex;
   align-items: center;
@@ -143,6 +146,10 @@ button.secondary {
   background: rgba(255,255,255,0.08);
   color: var(--text);
   border: 1px solid rgba(255,255,255,0.12);
+}
+.hidden-output,
+.hidden-action {
+  display: none;
 }
 .output-header {
   display: flex;

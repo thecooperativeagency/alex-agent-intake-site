@@ -352,6 +352,26 @@ button.primary {
   color: #3f6652;
 }
 
+.success-screen {
+  display: none;
+  text-align: center;
+  justify-items: center;
+  gap: 12px;
+  padding-block: 44px;
+}
+
+.success-screen .section-copy {
+  max-width: 42ch;
+}
+
+.form-shell.submitted > :not(.success-screen) {
+  display: none;
+}
+
+.form-shell.submitted .success-screen {
+  display: grid;
+}
+
 @media (max-width: 860px) {
   .hero-shell,
   .form-intro,

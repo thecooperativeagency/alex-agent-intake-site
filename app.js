@@ -1,6 +1,7 @@
 const form = document.getElementById('intakeForm');
 const submitBtn = document.getElementById('submitBtn');
 const submitStatus = document.getElementById('submitStatus');
+const successScreen = document.getElementById('successScreen');
 const submitEndpoint = window.ALEX_AGENT_CONFIG?.submitEndpoint || '';
 
 function getValues() {
@@ -79,6 +80,8 @@ form.addEventListener('submit', async (event) => {
     setSubmitStatus('Thanks — your answers were sent successfully.', 'success');
     submitBtn.textContent = 'Submitted';
     submitBtn.disabled = true;
+    form.classList.add('submitted');
+    successScreen?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   } catch (error) {
     setSubmitStatus(`Sorry — there was a problem sending this form. ${error.message}`, 'error');
     setSubmitting(false);

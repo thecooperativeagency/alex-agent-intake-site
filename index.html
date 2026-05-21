@@ -3,81 +3,133 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Alex Agent — Initial Setup</title>
+    <title>Alex’s Assistant — Intelligent Assistant by The Cooperative Agency</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="page">
-      <section class="card hero">
-        <div>
-          <p class="eyebrow">Initial setup</p>
-          <h1>Alex Agent — Quick Setup</h1>
+      <section class="hero-shell">
+        <div class="hero-copy">
+          <p class="eyebrow">Intelligent Assistant by The Cooperative Agency</p>
+          <h1>Alex’s Assistant</h1>
           <p class="lede">
-            We only need a few basics to get started. Short answers are perfect.
+            Initial setup questions
           </p>
         </div>
-        <div class="hero-note">
-          <strong>What this is:</strong>
-          <span>A lightweight setup form.</span>
-          <strong>What this is not:</strong>
-          <span>A full business deep dive.</span>
-          <strong>Default launch channel:</strong>
-          <span>We’ll usually start in Telegram unless we decide otherwise together.</span>
+
+        <div class="hero-meta" aria-label="Setup summary">
+          <div class="meta-item">
+            <span class="meta-label">Time</span>
+            <strong>About 3 minutes</strong>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Focus</span>
+            <strong>Only go-live essentials</strong>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Default launch</span>
+            <strong>Telegram first, unless we decide otherwise</strong>
+          </div>
+          <div class="meta-item">
+            <span class="meta-label">Next</span>
+            <strong>We refine deeper workflows after this first pass</strong>
+          </div>
         </div>
       </section>
 
-      <form id="intakeForm" class="card form-card">
-        <div class="field-group">
-          <label for="agentName">1. What do you want to name the agent?</label>
-          <input id="agentName" name="agentName" type="text" placeholder="Example: Scout, Atlas, Alex Assistant" />
-        </div>
-
-        <fieldset class="field-group">
-          <legend>2. What business or businesses should it help with?</legend>
-          <div class="checkbox-grid">
-            <label><input type="checkbox" name="business" value="RV rental" /> RV rental</label>
-            <label><input type="checkbox" name="business" value="Home inspection" /> Home inspection</label>
-            <label><input type="checkbox" name="business" value="On-set sound work" /> On-set sound work</label>
+      <form id="intakeForm" class="form-shell">
+        <section class="form-intro section-card">
+          <div>
+            <p class="section-kicker">Phase one</p>
+            <h2>Core setup</h2>
           </div>
-          <input id="businessOther" name="businessOther" type="text" placeholder="Other / notes" />
-        </fieldset>
+          <p class="section-copy">
+            Enough to build the first usable version without turning this into a full discovery process.
+          </p>
+        </section>
 
-        <div class="field-group">
-          <label for="mainHelp">3. What is the main kind of help you want from it?</label>
-          <textarea id="mainHelp" name="mainHelp" rows="3" placeholder="Examples: handling inquiries, drafting emails, organizing leads, answering repeat questions, preparing follow-ups"></textarea>
-        </div>
+        <section class="section-card">
+          <div class="section-heading">
+            <p class="section-label">Identity &amp; scope</p>
+            <p class="section-caption">Name it clearly and point it at the right work.</p>
+          </div>
 
-        <div class="field-group">
-          <label for="tools">4. Which tools or accounts should it use at the start?</label>
-          <textarea id="tools" name="tools" rows="3" placeholder="Examples: Gmail, Google Calendar, Drive, website, CRM, text, email"></textarea>
-        </div>
+          <div class="field-group">
+            <label for="agentName"><span class="field-number">01</span> What should we call the agent?</label>
+            <input id="agentName" name="agentName" type="text" placeholder="Example: Scout, Atlas, Alex Assistant" />
+          </div>
 
-        <div class="field-group">
-          <label for="googleAccount">5. What primary Google or work account should we build around?</label>
-          <input id="googleAccount" name="googleAccount" type="email" placeholder="name@gmail.com" />
-        </div>
+          <fieldset class="field-group">
+            <legend><span class="field-number">02</span> Which business should it support first?</legend>
+            <p class="helper">Pick all that apply. Add context if the answer is more specific than the labels below.</p>
+            <div class="checkbox-grid">
+              <label><input type="checkbox" name="business" value="RV rental" /> <span>RV rental</span></label>
+              <label><input type="checkbox" name="business" value="Home inspection" /> <span>Home inspection</span></label>
+              <label><input type="checkbox" name="business" value="On-set sound work" /> <span>On-set sound work</span></label>
+            </div>
+            <input id="businessOther" name="businessOther" type="text" placeholder="Other business, offer, or notes" />
+          </fieldset>
+        </section>
 
-        <div class="field-group">
-          <label for="approval">6. What should it never do without your approval?</label>
-          <textarea id="approval" name="approval" rows="3" placeholder="Examples: send emails, contact clients, submit reports, change calendar events"></textarea>
-        </div>
+        <section class="section-card">
+          <div class="section-heading">
+            <p class="section-label">Work &amp; tools</p>
+            <p class="section-caption">Define the first job, then tell us what it needs to touch.</p>
+          </div>
 
-        <div class="field-group">
-          <label for="budget">7. What monthly budget should we stay inside?</label>
-          <select id="budget" name="budget">
-            <option value="">Select a range</option>
-            <option>Under $50 / month</option>
-            <option>$50–$150 / month</option>
-            <option>$150–$300 / month</option>
-            <option>$300+ / month</option>
-            <option>Not sure yet</option>
-          </select>
-        </div>
+          <div class="field-group">
+            <label for="mainHelp"><span class="field-number">03</span> What should it be best at on day one?</label>
+            <textarea id="mainHelp" name="mainHelp" rows="3" placeholder="Examples: handling inquiries, drafting replies, organizing leads, answering repeat questions, preparing follow-ups"></textarea>
+          </div>
 
-        <div class="actions">
-          <button type="submit" id="submitBtn" class="primary">Submit answers</button>
-        </div>
-        <p id="submitStatus" class="helper submit-status" aria-live="polite"></p>
+          <div class="field-group">
+            <label for="tools"><span class="field-number">04</span> Which tools or accounts should it plug into first?</label>
+            <textarea id="tools" name="tools" rows="3" placeholder="Examples: Gmail, Google Calendar, Drive, website inbox, CRM, Telegram"></textarea>
+          </div>
+        </section>
+
+        <section class="section-card">
+          <div class="section-heading">
+            <p class="section-label">Access, boundaries &amp; budget</p>
+            <p class="section-caption">Tell us what to build around, where the guardrails are, and what spend to respect.</p>
+          </div>
+
+          <div class="field-group">
+            <label for="googleAccount"><span class="field-number">05</span> Which Google or work account should we build around?</label>
+            <input id="googleAccount" name="googleAccount" type="email" placeholder="name@gmail.com" />
+          </div>
+
+          <div class="field-group">
+            <label for="approval"><span class="field-number">06</span> What should always require your approval?</label>
+            <textarea id="approval" name="approval" rows="3" placeholder="Examples: sending emails, contacting clients, changing calendar events, submitting reports"></textarea>
+          </div>
+
+          <div class="field-group">
+            <label for="budget"><span class="field-number">07</span> What monthly budget should we design inside?</label>
+            <select id="budget" name="budget">
+              <option value="">Select a range</option>
+              <option>Under $50 / month</option>
+              <option>$50–$150 / month</option>
+              <option>$150–$300 / month</option>
+              <option>$300+ / month</option>
+              <option>Not sure yet</option>
+            </select>
+          </div>
+        </section>
+
+        <section class="submit-band">
+          <div>
+            <p class="submit-heading">That’s enough to start well.</p>
+            <p class="helper submit-copy">Once this is in, we can shape the deeper workflows in a second pass.</p>
+          </div>
+          <div class="submit-actions">
+            <button type="submit" id="submitBtn" class="primary">Submit answers</button>
+            <p id="submitStatus" class="helper submit-status" aria-live="polite"></p>
+          </div>
+        </section>
       </form>
     </main>
 
